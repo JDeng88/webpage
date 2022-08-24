@@ -22,12 +22,26 @@ export default function SignIn() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const res = await ky.post(API_URL, {
-        json: {
-            "email": data.get('email'),
-            "password": data.get('password'),
-        }
-    }).json();
+    // const res = await ky.post('login', {
+    //     prefixUrl: API_URL,
+    //     withCredentials: true,
+    //     credentials: 'include',
+    //     json: {
+    //         "phone_number": data.get('phone_number'),
+    //         "password": data.get('password'),
+    // }}).json();
+    const res = await fetch(API_URL + '/login', {
+      method: 'POST',
+      mode: 'cors',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'phone_number': data.get('phone_number'),
+        'password': data.get('password')
+      })
+    })
     console.log(res)
   };
 
@@ -54,10 +68,9 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="phone_number"
+              label="Phone Number"
+              name="phone_number"
               autoFocus
             />
             <TextField
@@ -70,10 +83,7 @@ export default function SignIn() {
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+            
             <Button
               type="submit"
               fullWidth

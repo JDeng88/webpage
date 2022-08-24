@@ -4,7 +4,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+    done(null, user);
 });
 
 passport.deserializeUser((id, done) => {
@@ -13,16 +13,12 @@ passport.deserializeUser((id, done) => {
     });
 });
 
-// Local Strategy
 passport.use(
     new LocalStrategy({ usernameField: "phone_number" }, (number, password, done) => {
-        // Match User
         User.findOne({ phone_number: number })
             .then(user => {
-                // Match password
                 bcrypt.compare(password, user.password, (err, isMatch) => {
                     if (err) throw err;
-
                     if (isMatch) {
                         return done(null, user);
                     } else {
