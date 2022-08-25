@@ -1,5 +1,5 @@
 import './App.css'
-import React, {usestate} from 'react'
+import {usestate} from 'react'
 
 function Home(props){
 
