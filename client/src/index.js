@@ -9,7 +9,6 @@ import reportWebVitals from './reportWebVitals';
 import Shop from './Shop'
 import Checkout from './Checkout'
 
-import AdminRoute from './utils/AdminRoute'
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
