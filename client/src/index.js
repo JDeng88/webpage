@@ -1,4 +1,4 @@
-import {useEffect, useSate} from 'react';
+import React, {useEffect, useSate} from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App'
