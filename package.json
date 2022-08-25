@@ -3,16 +3,18 @@
     "dotenv": "^16.0.1"
   },
   "scripts": {
-    "start:client": "cd client && npm start",
-    "start:server": "cd server && npm start",
-    "dev:server": "cd server && npm dev",
-    "start": "node server/server.js",
-    "heroku-postbuild": "cd server && npm install && cd ../client && npm install && npm run build"
+    "build": "cd client && npm run build",
+    "install-client": "cd client && npm install",
+    "heroku-postbuild": "npm run install-client && npm run build",
+    "server": "nodemon server/server.js",
+    "develop": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\"",
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\""
   },
   "engines": {
     "node": "16.x"
   },
   "dependencies": {
-    "yarn": "^1.22.19"
+    "concurrently": "^7.3.0",
+    "nodemon": "^2.0.19"
   }
 }
