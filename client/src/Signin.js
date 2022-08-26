@@ -15,7 +15,7 @@ import ky from 'ky';
 
 const theme = createTheme();
 
-const API_URL = process.env.API_URL || 'http://localhost:8088'
+const API_URL = process.env.API_URL
 
 export default function SignIn() {
 

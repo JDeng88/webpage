@@ -13,7 +13,7 @@ import ky from 'ky';
 export default function OrderContent(){
 
     const [orders, setOrders] = useState([])
-    const API_URL = process.env.API_URL || 'http://localhost:8088'
+    const API_URL = process.env.API_URL
 
     useEffect(() => {
         const getOrders = async () => {
