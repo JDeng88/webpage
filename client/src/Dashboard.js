@@ -76,7 +76,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 function DashboardContent() {
-  const API_URL = process.env.API_URL || 'http://localhost:8088'
+  const API_URL = process.env.API_URL
 
   const [open, setOpen] = useState(true);
   const [page, setPage] = useState('order');
