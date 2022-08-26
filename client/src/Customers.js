@@ -20,6 +20,7 @@ export default function CustomerContent(){
 
     useEffect(() => {
         const getCustomers = async () => {
+            console.log(API_URL, ' is api url')
             ky.get('customers', {
                 prefixUrl: API_URL
             }).json()
