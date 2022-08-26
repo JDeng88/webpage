@@ -16,7 +16,7 @@ import ky from 'ky';
 export default function CustomerContent(){
 
     const [customers, setCustomers] = useState([])
-    const API_URL = process.env.API_URL || 'http://localhost:8088'
+    const API_URL = process.env.API_URL
 
     useEffect(() => {
         const getCustomers = async () => {
