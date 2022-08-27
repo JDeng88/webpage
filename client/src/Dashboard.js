@@ -99,17 +99,17 @@ function DashboardContent() {
     setPage('customers')
   }
 
-  useEffect(() => {
-    const checkAdmin = async () => {
-      var res = await fetch(API_URL + '/isAdmin', {
-        credentials: 'include',
-      })
-      res = res.json()
-      console.log(res)
-      setIsAdmin(res.isAdmin)
-    }
-    checkAdmin()
-  })
+  // useEffect(() => {
+  //   const checkAdmin = async () => {
+  //     var res = await fetch(API_URL + '/isAdmin', {
+  //       credentials: 'include',
+  //     })
+  //     res = res.json()
+  //     console.log(res)
+  //     setIsAdmin(res.isAdmin)
+  //   }
+  //   checkAdmin()
+  // })
 
   if (true){
     return (
