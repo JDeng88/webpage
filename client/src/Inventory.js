@@ -26,9 +26,6 @@ export default function InventoryContent(){
             prefixUrl: API_URL
         }).json()
         .then((res) => {
-          res.items.map(item => {
-            item.image = Buffer.from(item.image.data).toString('base64')
-          })
           setItems(res.items)
         })
       }

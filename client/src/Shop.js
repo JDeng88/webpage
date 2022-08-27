@@ -9,6 +9,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
+import {Buffer} from 'buffer'
 
 
 export default function Shop() {
