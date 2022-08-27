@@ -10,9 +10,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 
+
 export default function Shop() {
 
-    const API_URL = process.env.API_URL
+    const API_URL = process.env.REACT_APP_API_URL
     const navigate = useNavigate();
 
     const [items, setItems] = useState([])

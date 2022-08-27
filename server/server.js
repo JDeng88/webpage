@@ -38,7 +38,7 @@ app.use(bodyparser.urlencoded({
     extended:true
 }))
 app.use(express.json());
-const port = process.env.PORT;
+const port = process.env.PORT || 8088;
 
 const db = process.env.DB_URI;
 // const db = 'mongodb+srv://werdna:cEZaONK6U1tEQJHl@werdna0.cry5dj4.mongodb.net/?retryWrites=true&w=majority'

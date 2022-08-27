@@ -1,7 +1,4 @@
 {
-  "devDependencies": {
-    "dotenv": "^16.0.1"
-  },
   "scripts": {
     "build": "cd client && npm run build",
     "install-client": "cd client && npm install",
@@ -16,6 +13,7 @@
   },
   "dependencies": {
     "concurrently": "^7.3.0",
+    "create-react-app": "^5.0.1",
     "nodemon": "^2.0.19"
   }
 }
