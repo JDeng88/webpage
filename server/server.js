@@ -40,9 +40,9 @@ app.use(bodyparser.urlencoded({
 app.use(express.json());
 const port = process.env.PORT || 8088;
 
-const db = process.env.DB_URI;
+// const db = process.env.DB_URI;
 // const db = 'mongodb+srv://werdna:cEZaONK6U1tEQJHl@werdna0.cry5dj4.mongodb.net/?retryWrites=true&w=majority'
-
+const db = 'mongodb://localhost:27017/werdnadb'
 mongoose
     .connect(db)
     .then(() => console.log('Sucessfuly connected to database'))
