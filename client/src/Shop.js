@@ -10,6 +10,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import {Buffer} from 'buffer'
+import { Container } from '@mui/system';
 
 
 export default function Shop() {
@@ -64,34 +65,34 @@ export default function Shop() {
                     </IconButton>
                 </Box>
             </Toolbar>
-            <ImageList sx={{ width: 1, height: 1, margin: 2, padding: 2 }}>
-            {items.map((item) => (
-                <ImageListItem key={item.img}>
-                <img
-                    src={"data:image/jpeg;base64," + item.image}
-                    alt={item.name}
-                    loading="lazy"
-                />
-                <ImageListItemBar
-                    title={item.name}
-                    subtitle={<span>{item.description}</span>}
-                    position="below"
-                    actionIcon={
-                        <Button 
-                        color="primary" 
-                        value={item.index} 
-                        onClick={addToCart}
-                        variant="contained"
-                        >
-                        Add to cart
-                        </Button>
-                    }
-                />
-
-                
-                </ImageListItem>
-            ))}
-            </ImageList>
+            <Container align="center" sx={{width: 1}}>
+                <ImageList sx={{ width: 1, height: 1}} cols={3} rowHeight={300} variant="masonry">
+                {items.map((item) => (
+                    <ImageListItem key={item.img}>
+                    <img
+                        src={"data:image/jpeg;base64," + item.image}
+                        alt={item.name}
+                        loading="lazy"
+                    />
+                    <ImageListItemBar
+                        title={item.name}
+                        subtitle={<span>{item.description}</span>}
+                        actionIcon={
+                            <Button 
+                            color="primary" 
+                            value={item.index} 
+                            onClick={addToCart}
+                            variant="contained"
+                            >
+                            Add to cart
+                            </Button>
+                        }
+                    />
+                    </ImageListItem>
+                ))}
+                </ImageList>
+            </Container>
+            
         </>
     )
 
