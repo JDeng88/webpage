@@ -8,35 +8,13 @@ const saltRounds = 10
 const LocalStrategy = require('passport-local')
 
 
-router.post("/login", (req, res, next) => { 
-    passport.authenticate("local", function(err, user, info) {
-        console.log('user is', user)
 
-        if (err) {
-            console.log(err)
-            return res.status(400).json({ errors: err });
-        }
-        if (!user) {
-            console.log('no user fouund')
-            return res.status(400).json({ errors: "No user found" });
-        }
-        req.logIn(user, function(err) {
-            if (err) {
-                console.log('user found, error')
-                return res.status(400).json({ errors: err });
-            }
-            console.log(user.isAdmin, 'user is admin')
-            if (user.isAdmin){
-                req.session.isAdmin = true
-            }
-            return res.status(200).json({ success: `logged in ${user.id}` });
-        });
-    })(req, res, next)
+router.post("/login", (req, res, next) => { 
+    //test
 })
 
 router.get("/isAdmin", function(req, res){
-    console.log('isadmin route called')
-    console.log(req.sessionID, 'is session id')
+
     if (req.isAuthenticated()){
         console.log('admin found')
         res.send({
