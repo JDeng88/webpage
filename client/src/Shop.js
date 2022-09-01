@@ -9,6 +9,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
+import LoginIcon from '@mui/icons-material/Login';
 import {Buffer} from 'buffer'
 import { Container } from '@mui/system';
 
@@ -21,10 +22,19 @@ export default function Shop() {
     const [items, setItems] = useState([])
     const [cart, setCart] = useState([])
     const [loaded, setLoaded] = useState(false)
+    const [loggedIn, setLoggedIn] = useState(false)
 
     useEffect(() => {
-      const getItems = async () => {
-        ky.get('inventory', {
+        ky.get("isUser", {
+            prefixUrl: API_URL,
+            headers: {
+                "token": localStorage.getItem("JWT")
+            }
+        }).json()
+        .then((res) => {
+            setLoggedIn(res.isUser)
+        })
+        ky.get("inventory", {
             prefixUrl: API_URL
         }).json()
         .then((res) => {
@@ -35,34 +45,62 @@ export default function Shop() {
             setItems(res.items)
             setLoaded(true)
         })
-      }
-      getItems()
     }, [])
+    
 
     const addToCart = (e) => {
         var newCart = [...cart]
         newCart.push(e.currentTarget.value)
-        console.log(newCart)
         setCart(newCart)
     }
 
     const goCheckout = () => {
-        navigate('/checkout', {state: {
-            items: items,
-            cart: cart
-        }})
+        ky.get("isUser", {
+            prefixUrl: API_URL,
+            headers: {
+                "token": localStorage.getItem("JWT")
+            }
+        }).json()
+        .then((res) => {
+            console.log(res)
+            if (res.isUser){
+                navigate('/checkout', {state: {
+                    items: items,
+                    cart: cart
+                }})
+            } else {
+                goSignin()
+            }
+        })   
     }
+
+    const goSignin = () => {
+        navigate('/signin')
+    }
+
+    const checkOutButton = (
+        <IconButton
+            color="primary"
+            onClick={goCheckout}
+            >
+                <ShoppingCartIcon />
+        </IconButton>
+    ) 
+
+    const loginButton = (
+        <IconButton
+            color="primary"
+            onClick={goSignin}
+            >
+                <LoginIcon />
+        </IconButton>
+    )
 
     const item_view = (
         <>
             <Toolbar>
                 <Box>
-                    <IconButton
-                    color="primary"
-                    onClick={goCheckout}
-                    >
-                        <ShoppingCartIcon />
-                    </IconButton>
+                    {loggedIn ? checkOutButton : loginButton}
                 </Box>
             </Toolbar>
             <Container align="center" sx={{width: 1}}>
@@ -96,10 +134,16 @@ export default function Shop() {
         </>
     )
 
+    const loading_view = (
+        <Container>
+          <img src={require("./loading.gif")}></img>
+        </Container>
+      )
+
     if (!loaded){
-        return (<h1> loading... </h1>)
+        return loading_view
     } else {
-        return(item_view)
+        return item_view
     }
 
 }

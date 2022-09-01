@@ -7,10 +7,10 @@ const auth = require('./routes/auth');
 const upload = require('./routes/upload')
 const retrieve = require('./routes/retrieve')
 const bodyparser = require('body-parser')
-const cookie = require('cookie-parser')
+const cookieParser = require('cookie-parser')
 const fs = require('fs')
-const mongoose_gridfs = require('mongoose-gridfs')
 const path = require('path')
+
 
 
 
@@ -28,56 +28,33 @@ const session = require('express-session');
 //const session = require('cookie-session');
 dotenv.config();
 
+
+
 const app = express();
 app.use(cors({
     origin: 'http://127.0.0.1:3000',
-    credentials: true
+    credentials: true,
 }));
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({
     extended:true
 }))
 app.use(express.json());
+app.use(cookieParser());
+app.use(express.static(path.resolve(__dirname, "../client/build")));
+
+
 const port = process.env.PORT || 8088;
 
-// const db = process.env.DB_URI;
-// const db = 'mongodb+srv://werdna:cEZaONK6U1tEQJHl@werdna0.cry5dj4.mongodb.net/?retryWrites=true&w=majority'
-const db = 'mongodb://localhost:27017/werdnadb'
+const db = process.env.DB_URI;
+
 mongoose
     .connect(db)
     .then(() => console.log('Sucessfuly connected to database'))
     .catch(err => console.log(err))
 
 
-app.use(
-    session({
-        secret: 'fat werdna is very fat lmao',
-        resave: false,
-        saveUninitialized: false,
-        store: MongoStore.create({mongoUrl: db}),
-        cookie: {
-            secure: false,
-            httpOnly: false,
-            sameSite: 'none',
-        }
-    })
-)
-
-app.use(passport.initialize())
-app.use(passport.session())
-
-
-
-app.use(express.static(path.resolve(__dirname, "../client/build")));
-
-
-
-
 app.use('/', auth)
-app.use('/', upload)
-app.use('/', retrieve)
-
-
 
 
 app.get("*", function (request, response) {

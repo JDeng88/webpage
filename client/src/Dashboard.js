@@ -11,7 +11,6 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -25,7 +24,7 @@ import {Navigate} from 'react-router-dom';
 import Inventory from './Inventory'
 import Customers from './Customers'
 import Orders from './Orders'
-
+import ky from 'ky'
 
 
 const drawerWidth = 240;
@@ -81,6 +80,7 @@ function DashboardContent() {
 
   const [open, setOpen] = useState(true);
   const [page, setPage] = useState('order');
+  const [loaded, setLoaded] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
 
   const toggleDrawer = () => {
@@ -99,21 +99,30 @@ function DashboardContent() {
     setPage('customers')
   }
 
-  // useEffect(() => {
-  //   const checkAdmin = async () => {
-  //     var res = await fetch(API_URL + '/isAdmin', {
-  //       credentials: 'include',
-  //     })
-  //     res = res.json()
-  //     console.log(res)
-  //     setIsAdmin(res.isAdmin)
-  //   }
-  //   checkAdmin()
-  // })
+  useEffect(() => {
+    const checkAdmin = async () => {
+      ky.get('isAdmin', {
+        prefixUrl: API_URL,
+        headers: {
+          "token": localStorage.getItem("JWT")
+        }
+      }).json()
+      .then((res) => {
+        setIsAdmin(res.isAdmin)
+        setLoaded(true)
+      })
+    }
+    checkAdmin()
+  }, [])
 
-  if (true){
-    return (
-      <ThemeProvider theme={mdTheme}>
+  const loading_view = (
+    <Container>
+      <img src="./loading.gif"></img>
+    </Container>
+  )
+
+  const loaded_view = (
+    <ThemeProvider theme={mdTheme}>
         <Box sx={{ display: 'flex' }}>
           <CssBaseline />
           <AppBar position="absolute" open={open}>
@@ -143,11 +152,6 @@ function DashboardContent() {
               >
                 Dashboard
               </Typography>
-              <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
             </Toolbar>
           </AppBar>
           <Drawer variant="permanent" open={open}>
@@ -206,10 +210,19 @@ function DashboardContent() {
           </Box>
         </Box>
       </ThemeProvider>
-    );
+  )
+
+
+  if (!loaded){
+    return loading_view;
   } else {
-    return (<Navigate to="/" />)
+    if (isAdmin){
+      return loaded_view;
+    } else {
+      return (<Navigate to="/" />)
+    }
   }
+  
   
 }
 

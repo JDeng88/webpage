@@ -4,17 +4,18 @@ import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import Grid from '@mui/material/Grid';
 import {useLocation} from 'react-router-dom';
 import Button from '@mui/material/Button'
+import { Container} from '@mui/material';
+import ky from 'ky';
 
 
 export default function Checkout() {
+  
+    const API_URL = process.env.REACT_APP_API_URL
 
-
-    // const cart = useLocation().state.cart
-    const [cart, setCart] = useState([])
-    const [items, setItems] = useState([])
+    const [cart, setCart] = useState([]) //indices of items in cart array
+    const [items, setItems] = useState([]) 
     const location = useLocation()
 
     useEffect(() => {
@@ -22,8 +23,25 @@ export default function Checkout() {
         setItems(location.state.items)
     }, [])
 
+    const submitOrder = async () => {
+      var cart_ids = []
+      for (var item of cart){
+        cart_ids.push(items[item]._id)
+      }
+      console.log(cart_ids)
+      ky.post('createOrder', {
+        prefixUrl: API_URL,
+        headers: {
+          "token": localStorage.getItem("JWT")
+        },
+        json: {
+          cart: cart_ids
+        }
+      })
+    }
+
     return (
-      <>
+      <Container maxWidth="sm" sx={{my: 10}}>
         <Typography variant="h6" gutterBottom>
           Order summary
         </Typography>
@@ -38,9 +56,10 @@ export default function Checkout() {
             type="submit"
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            onClick={submitOrder}
             >
-            Create User
+            Confirm Order
         </Button>
-      </>
+      </Container>
     );
   }

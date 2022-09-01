@@ -39,9 +39,12 @@ export default function InventoryContent(){
       const data = new FormData(event.currentTarget);
       ky.post('upload', {
           prefixUrl: API_URL,
-          json: {
-              name: data.get('name'),
-          }
+          body: data
+          // json: {
+          //     name: data.get('name'),
+          //     description: data.get('description'),
+
+          // }
       })
       .then(() => window.location.reload())
     }
@@ -61,27 +64,50 @@ export default function InventoryContent(){
             <TextField
             margin="normal"
             required
+            id="price"
+            label="Price"
+            name="price"
+            autoFocus
+            />
+            <br></br>
+            <TextField
+            margin="normal"
+            required
             id="description"
             label="Description"
             name="description"
             autoFocus
             />
+
+            <br></br>
+
+            <Button
+              variant="contained"
+              component="label"
+            >
+              Upload File
+              <input
+                type="file"
+                name="image"
+                hidden
+              />
+            </Button>
             
             <Button
             type="submit"
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
             >
             Create Item
             </Button>
         </Box>
+        <br></br>
         <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
             <TableHead>
             <TableRow>
                 <TableCell>Item</TableCell>
                 <TableCell align="right">Description</TableCell>
-                {/* <TableCell align="right">Image</TableCell> */}
+                <TableCell align="right">Price</TableCell>
             </TableRow>
             </TableHead>
             <TableBody>
@@ -94,6 +120,7 @@ export default function InventoryContent(){
                     {i.name}
                 </TableCell>
                 <TableCell align="right">{i.description}</TableCell>
+                <TableCell align="right">{i.price}</TableCell>
                 </TableRow>
             ))}
             </TableBody>

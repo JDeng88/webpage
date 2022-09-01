@@ -1,11 +1,9 @@
 import React, {useEffect, useSate} from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App'
 import Signin from './Signin'
 import Dashboard from './Dashboard'
 import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
-import reportWebVitals from './reportWebVitals';
 import Shop from './Shop'
 import Checkout from './Checkout'
 
