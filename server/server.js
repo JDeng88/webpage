@@ -9,9 +9,8 @@ const retrieve = require('./routes/retrieve')
 const bodyparser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const fs = require('fs')
-const mongoose_gridfs = require('mongoose-gridfs')
 const path = require('path')
-const jwt = require('jsonwebtoken')
+
 
 
 
@@ -55,36 +54,7 @@ mongoose
     .catch(err => console.log(err))
 
 
-
-
-app.use(
-    session({
-        secret: 'fat werdna is very fat lmao',
-        resave: false,
-        saveUninitialized: false,
-        store: MongoStore.create({mongoUrl: db}),
-        cookie: {
-            secure: false,
-            httpOnly: false,
-            sameSite: false,
-        }
-    })
-)
-
-app.use(passport.initialize())
-app.use(passport.session())
-
-
-
-
-
-
-
 app.use('/', auth)
-app.use('/', upload)
-app.use('/', retrieve)
-
-
 
 
 app.get("*", function (request, response) {

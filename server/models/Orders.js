@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const ItemSchema = require('./Items')
 
 const OrderSchema = new mongoose.Schema({
     customer: {
@@ -17,8 +16,11 @@ const OrderSchema = new mongoose.Schema({
     total_price: {
         type: Number,
         required: true
+    },
+    item_names : {
+        type: [String],
+        required: true
     }
-
 })
 
 module.exports = Order = mongoose.model("orders", OrderSchema)

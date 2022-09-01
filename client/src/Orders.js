@@ -50,7 +50,7 @@ export default function OrderContent(){
                         {o.customer}
                     </TableCell>
                     <TableCell align="right">{o.address}</TableCell>
-                    <TableCell align="right">{String(o.items)}</TableCell>
+                    <TableCell align="right">{String(o.item_names)}</TableCell>
                     <TableCell align="right">{String(o.total_price)}</TableCell>
                     </TableRow>
                 ))}

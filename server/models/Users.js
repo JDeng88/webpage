@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
 
+function isInitialized(){
+    return this.initialized;
+}
 const UserSchema = new mongoose.Schema({
         name: {
             type: String,
@@ -7,6 +10,7 @@ const UserSchema = new mongoose.Schema({
         },
         phone_number: {
             type: Number,
+            required: isInitialized()
         },
         access_code: {
             type: String,
@@ -14,6 +18,7 @@ const UserSchema = new mongoose.Schema({
         },
         password: {
             type: String,
+            required: isInitialized()
         },
         isAdmin: {
             type: Boolean,
@@ -22,6 +27,10 @@ const UserSchema = new mongoose.Schema({
         initialized: {
             type: Boolean,
             default: false
+        },
+        address: {
+            type: String,
+            required: isInitialized()
         }
 })
 

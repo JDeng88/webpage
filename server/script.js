@@ -16,7 +16,11 @@ Users.create({
     name: "admin",
     phone_number: 3475024539,
     isAdmin: true,
+    address:"123 your moms house",
     password: hash,
-    initalized: true,
+    initialized: true,
     access_code: "hi mom"
+})
+.then(() => {
+    process.exit()
 })

@@ -70,7 +70,9 @@ export default function CustomerContent(){
                 <TableRow>
                     <TableCell>Customer</TableCell>
                     <TableCell align="right">Phone number</TableCell>
-                    <TableCell align="right">Status</TableCell>
+                    <TableCell align="right">Address</TableCell>
+                    <TableCell align="right">Account Activated</TableCell>
+                    <TableCell align="right">Code</TableCell>
                     <TableCell align="right">Is Admin</TableCell>
                 </TableRow>
                 </TableHead>
@@ -84,6 +86,8 @@ export default function CustomerContent(){
                         {c.name}
                     </TableCell>
                     <TableCell align="right">{c.phone_number}</TableCell>
+                    <TableCell align="right">{String(c.address)}</TableCell>
+                    <TableCell align="right">{String(c.initialized)}</TableCell>
                     <TableCell align="right">{String(c.access_code)}</TableCell>
                     <TableCell align="right">{String(c.isAdmin)}</TableCell>
                     </TableRow>

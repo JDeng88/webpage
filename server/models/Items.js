@@ -10,6 +10,10 @@ const ItemSchema = new mongoose.Schema({
     },
     image: {
         type: Buffer
+    },
+    price: {
+        type: Number,
+        required: true
     }
 })
 
