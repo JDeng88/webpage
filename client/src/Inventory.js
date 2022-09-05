@@ -23,7 +23,10 @@ export default function InventoryContent(){
     useEffect(() => {
       const getItems = async () => {
         ky.get('inventory', {
-            prefixUrl: API_URL
+            prefixUrl: API_URL,
+            headers: {
+              "token": localStorage.getItem("JWT")
+            }
         }).json()
         .then((res) => {
           setItems(res.items)
@@ -40,11 +43,6 @@ export default function InventoryContent(){
       ky.post('upload', {
           prefixUrl: API_URL,
           body: data
-          // json: {
-          //     name: data.get('name'),
-          //     description: data.get('description'),
-
-          // }
       })
       .then(() => window.location.reload())
     }

@@ -105,7 +105,6 @@ export default function SignIn() {
 
   const alert = (
     <Snackbar
-      open={errorMessage != ''}
       autoHideDuration={6000}
       message={errorMessage}
       onClose={() => {setErrorMessage('')}}
@@ -173,6 +172,7 @@ export default function SignIn() {
             </Button>
           </Box>
         </Box>
+        {errorMessage == '' ? alert : <></>}
       </Container>
     </ThemeProvider>
   );

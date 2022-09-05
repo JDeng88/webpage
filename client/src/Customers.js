@@ -21,7 +21,10 @@ export default function CustomerContent(){
     useEffect(() => {
         const getCustomers = async () => {
             ky.get('customers', {
-                prefixUrl: API_URL
+                prefixUrl: API_URL,
+                headers: {
+                    "token": localStorage.getItem("JWT")
+                }
             }).json()
             .then((res) => {
                 console.log(res.users)

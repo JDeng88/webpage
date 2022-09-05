@@ -4,7 +4,7 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import ky from 'ky'
-import Button from '@mui/material/Button';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box'
@@ -116,14 +116,18 @@ export default function Shop() {
                         title={item.name}
                         subtitle={<span>{item.description}</span>}
                         actionIcon={
-                            <Button 
-                            color="primary" 
-                            value={item.index} 
-                            onClick={addToCart}
-                            variant="contained"
-                            >
-                            Add to cart
-                            </Button>
+                            loggedIn
+                            ? (
+                                <IconButton 
+                                color="primary" 
+                                value={item.index} 
+                                onClick={addToCart}
+                                variant="contained"
+                                >
+                                    <AddShoppingCartIcon fontSize='medium' style={{ color: 'white' }}/>
+                                </IconButton>
+                            )
+                            : <></>
                         }
                     />
                     </ImageListItem>

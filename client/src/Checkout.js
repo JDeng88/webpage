@@ -15,12 +15,23 @@ export default function Checkout() {
     const API_URL = process.env.REACT_APP_API_URL
 
     const [cart, setCart] = useState([]) //indices of items in cart array
-    const [items, setItems] = useState([]) 
+    const [items, setItems] = useState([])
+    const [total, setTotal] = useState(0)
+    const [loaded, setLoaded] = useState(false)
     const location = useLocation()
 
     useEffect(() => {
         setCart(location.state.cart)
         setItems(location.state.items)
+        console.log(cart)
+        var cart_total = 0
+        for (var item of cart){
+          console.log('curr item price is', items[item].price)
+          cart_total += items[item].price
+        }
+        console.log(cart_total)
+        setTotal(cart_total)
+        setLoaded(true)
     }, [])
 
     const submitOrder = async () => {
@@ -40,26 +51,34 @@ export default function Checkout() {
       })
     }
 
-    return (
-      <Container maxWidth="sm" sx={{my: 10}}>
-        <Typography variant="h6" gutterBottom>
-          Order summary
-        </Typography>
-        <List disablePadding>
-          {cart.map((item) => (
+    if (loaded){
+      return (
+        <Container maxWidth="sm" sx={{my: 10}}>
+          <Typography variant="h6" gutterBottom>
+            Order Summary
+          </Typography>
+          <List disablePadding>
+            {cart.map((item) => (
+              <ListItem sx={{ py: 1, px: 0 }}>
+                <ListItemText primary={items[item].name} secondary={items[item].description} />
+                <ListItemText primary={items[item].price} style={{flex: 1}}/>
+              </ListItem>
+            ))}
             <ListItem sx={{ py: 1, px: 0 }}>
-              <ListItemText primary={items[item].name} secondary={items[item].description} />
+              <ListItemText primary="Total" />
+              <ListItemText primary={total} style={{flex: 1}}/>
             </ListItem>
-          ))}
-        </List>
-        <Button
-            type="submit"
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={submitOrder}
-            >
-            Confirm Order
-        </Button>
-      </Container>
-    );
+          </List>
+          <Button
+              type="submit"
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={submitOrder}
+              >
+              Confirm Order
+          </Button>
+        </Container>
+      );
+    }
+    
   }

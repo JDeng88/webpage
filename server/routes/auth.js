@@ -14,22 +14,44 @@ dotenv.config()
 
 const JWT_SECRET = process.env.JWT_SECRET
 
-
+//JWT Middleware
 const verify_token = (req, res, next) => {
     var token = req.headers["token"];
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
         req.user = decoded;
-        console.log('decoded toekn is', decoded)
     } catch (err) {
         req.user = null;
-        console.log('no token found')
     }
     return next();
 }
 
-router.post("/login", (req, res, next) => { 
 
+//Helper Routes
+router.get("/isAdmin", verify_token, function(req, res){
+    res.json({
+        isAdmin: req.user != null && req.user.isAdmin
+    })
+})
+
+router.get("/isUser", verify_token, function(req, res){
+    res.json({
+        isUser: req.user != null
+    })
+})
+
+
+//Public Routes
+
+router.get("/inventory", verify_token, function(req, res){
+    Item.find()
+    .then(itemList => {
+        res.send({items: itemList})
+    })
+})
+
+
+router.post("/login", (req, res, next) => { 
     User.findOne({phone_number: req.body.phone_number})
     .then((user) => {
         if (user == null){
@@ -58,17 +80,7 @@ router.post("/login", (req, res, next) => {
     })
 })
 
-router.get("/isAdmin", verify_token, function(req, res){
-    res.json({
-        isAdmin: req.user != null && req.user.isAdmin
-    })
-})
 
-router.get("/isUser", verify_token, function(req, res){
-    res.json({
-        isUser: req.user != null
-    })
-})
 
 router.post("/signup", function(req, res){
     console.log('code is', req.body.code)
@@ -107,33 +119,14 @@ router.post("/signup", function(req, res){
     })
 })
 
-router.post("/createUser", function(req, res){
-    const generateUser = () => {
-        var user_code = generator.generate({
-            length: 20,
-            numbers: true,
-        })
-        console.log('code generated is ', user_code)
-        User.findOne({access_code: user_code})
-            .then(user => {
-                console.log(user)
-                if (user == null){
-                    console.log('user not found')
-                    User.create({access_code: user_code, name: req.body.name})
-                    console.log('user created')
-                    res.end()
-                } else {
-                    generateUser()
-                }
-        })
-    }
-    generateUser()
-})
 
 
+//User route
 router.post("/createOrder", verify_token, function(req, res){
     //TODO: allow item duplicates
-    
+    if (req.user == null){
+        res.status(401)
+    }
     const generateOrder = () => {
         var database_ids = req.body.cart.map(id => mongoose.Types.ObjectId(id))
         console.log(database_ids)
@@ -167,44 +160,86 @@ router.post("/createOrder", verify_token, function(req, res){
     generateOrder()
 })
 
-router.post("/upload", function(req, res){
-    var form_data = new multiparty.Form()
-    form_data.parse(req, (err, fields, files) => {
-        fs.readFile(files.image[0].path, (err, data) => {
-            Item.create({
-                name: fields.name[0],
-                description: fields.description[0],
-                price: fields.price[0],
-                image: data
-            })
-            .then(() => {
-                res.end()
+//Admin routes
+
+router.post("/createUser", verify_token, function(req, res){
+    const generateUser = () => {
+        var user_code = generator.generate({
+            length: 20,
+            numbers: true,
+        })
+        console.log('code generated is ', user_code)
+        User.findOne({access_code: user_code})
+            .then(user => {
+                console.log(user)
+                if (user == null){
+                    console.log('user not found')
+                    User.create({access_code: user_code, name: req.body.name})
+                    console.log('user created')
+                    res.end()
+                } else {
+                    generateUser()
+                }
+        })
+    }
+
+    if (req.user.isAdmin){
+        generateUser()
+    } else {
+        res.status(401)
+    }
+    
+})
+
+
+router.post("/upload", verify_token, function(req, res){
+    if (req.user.isAdmin){
+        var form_data = new multiparty.Form()
+        form_data.parse(req, (err, fields, files) => {
+            fs.readFile(files.image[0].path, (err, data) => {
+                Item.create({
+                    name: fields.name[0],
+                    description: fields.description[0],
+                    price: fields.price[0],
+                    image: data
+                })
+                .then(() => {
+                    res.end()
+                })
             })
         })
-    })
+    } else {
+        res.status(401)
+    }
+    
 })
 
 
 
-router.get("/customers", function(req, res){
-    User.find()
-    .then(userList => {
-        res.send({users: userList})
-    })
+router.get("/customers", verify_token, function(req, res){
+    if (req.user.isAdmin){
+        User.find()
+        .then(userList => {
+            res.send({users: userList})
+        })
+    } else {
+        res.status(401)
+    }
+    
 })
 
-router.get("/inventory", function(req, res){
-    Item.find()
-    .then(itemList => {
-        res.send({items: itemList})
-    })
-})
 
-router.get("/orders", function(req, res){
-    Order.find()
-    .then(orderList => {
-        res.send({orders: orderList})
-    })
+
+router.get("/orders", verify_token, function(req, res){
+    if (req.user.isAdmin){
+        Order.find()
+        .then(orderList => {
+            res.send({orders: orderList})
+        })
+    } else {
+        res.status(401)
+    }
+    
 })
 
 

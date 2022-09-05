@@ -19,7 +19,10 @@ export default function OrderContent(){
     useEffect(() => {
         const getOrders = async () => {
             ky.get('orders', {
-                prefixUrl: API_URL
+                prefixUrl: API_URL,
+                headers: {
+                    "token": localStorage.getItem("JWT")
+                }
             }).json()
             .then((res) => {
                 setOrders(res.orders)
